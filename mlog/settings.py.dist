@@ -1,0 +1,3 @@
+DB_PATH='log.db'
+LOG_PATH='log.txt'
+
