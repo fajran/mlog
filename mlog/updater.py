@@ -19,7 +19,7 @@ def update_stage_0(conn):
 
     email = c.fetchone()[0]
 
-    sender, receiver, subject, date, message_id = parser.parse(email)
+    subject, receiver, sender, date, message_id = parser.parse(email)
 
     stage = 1
     values = (sender, receiver, subject, date, message_id, stage, lid)
