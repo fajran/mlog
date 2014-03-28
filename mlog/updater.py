@@ -4,7 +4,7 @@ def update_stage_0(conn):
   c = conn.cursor()
   c.execute('''
     SELECT id
-    FROM log
+    FROM email_log
     WHERE stage=0
     ''')
 
@@ -13,7 +13,7 @@ def update_stage_0(conn):
     values = (lid,)
     c.execute('''
       SELECT email
-      FROM log
+      FROM email_log
       WHERE id=?
       ''', values)
 
@@ -24,7 +24,7 @@ def update_stage_0(conn):
     stage = 1
     values = (sender, receiver, subject, date, message_id, stage, lid)
     c.execute('''
-      UPDATE log
+      UPDATE email_log
       SET sender=?, receiver=?, subject=?, date_raw=?, message_id=?, stage=?
       WHERE id=?
       ''', values)
