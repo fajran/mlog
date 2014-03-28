@@ -1,4 +1,4 @@
-from . import parser
+import email
 
 def update_stage_0(conn):
   c = conn.cursor()
@@ -17,9 +17,14 @@ def update_stage_0(conn):
       WHERE id=?
       ''', values)
 
-    email = c.fetchone()[0]
+    content = c.fetchone()[0]
 
-    subject, receiver, sender, date, message_id = parser.parse(email)
+    m = email.message_from_string(str(content))
+    subject = m.get('Subject')
+    receiver = m.get('To')
+    sender = m.get('From')
+    date = m.get('Date')
+    message_id = m.get('Message-ID')
 
     stage = 1
     values = (sender, receiver, subject, date, message_id, stage, lid)
