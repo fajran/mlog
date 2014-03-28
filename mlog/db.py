@@ -13,6 +13,7 @@ def init(conn):
          receiver TEXT,
          subject TEXT,
          date_raw TEXT,
-         message_id TEXT
+         message_id TEXT,
+         attachments INTEGER
        )''')
 

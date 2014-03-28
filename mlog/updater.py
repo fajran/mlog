@@ -1,4 +1,8 @@
+import base64
 import email
+import os
+
+from . import settings
 
 def update_stage_0(conn):
   c = conn.cursor()
@@ -25,12 +29,45 @@ def update_stage_0(conn):
     sender = m.get('From')
     date = m.get('Date')
     message_id = m.get('Message-ID')
+    attachments = _count_attachments(m)
 
     stage = 1
-    values = (sender, receiver, subject, date, message_id, stage, lid)
+    values = (sender, receiver, subject, date, message_id, stage,
+              attachments, lid)
     c.execute('''
       UPDATE email_log
-      SET sender=?, receiver=?, subject=?, date_raw=?, message_id=?, stage=?
+      SET sender=?, receiver=?, subject=?, date_raw=?, message_id=?, stage=?,
+          attachments=?
       WHERE id=?
       ''', values)
+
+    path = settings.ATTACHMENT_SAVE_PATH
+    _save_attachments(lid, m, path)
+
+def _count_attachments(m):
+  return sum(map(_is_attachment, m.walk()))
+
+def _is_attachment(m):
+    cd = m.get('Content-Disposition')
+    return cd is not None and cd.startswith('attachment')
+
+def _save_attachments(lid, m, path):
+  index = 0
+  for item in m.walk():
+    if not _is_attachment(item):
+      continue
+
+    fname = item.get_filename()
+    mtype = item.get_content_type()
+    payload = item.get_payload()
+    content = base64.decodestring(payload)
+
+    _, ext = os.path.splitext(fname)
+    target = os.path.join(path, '%s-%s%s' % (lid, index, ext))
+
+    f = open(target, 'wb')
+    f.write(content)
+    f.close()
+
+    index += 1
 

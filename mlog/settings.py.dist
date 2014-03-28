@@ -1,3 +1,4 @@
 DB_PATH='log.db'
 LOG_PATH='log.txt'
+ATTACHMENT_SAVE_PATH=''
 
