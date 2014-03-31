@@ -30,14 +30,16 @@ def update_stage_0(conn):
     date = m.get('Date')
     message_id = m.get('Message-ID')
     attachments = _count_attachments(m)
+    in_reply_to = m.get('In-Reply-To')
+    references = m.get('References')
 
     stage = 1
     values = (sender, receiver, subject, date, message_id, stage,
-              attachments, lid)
+              attachments, in_reply_to, references, lid)
     c.execute('''
       UPDATE email_log
       SET `sender`=?, `receiver`=?, `subject`=?, `date_raw`=?, `message_id`=?, `stage`=?,
-          `attachments`=?
+          `attachments`=?, `in_reply_to`=?, `references`=?
       WHERE id=?
       ''', values)
 

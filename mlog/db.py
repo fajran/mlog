@@ -14,6 +14,9 @@ def init(conn):
          `subject` TEXT,
          `date_raw` TEXT,
          `message_id` TEXT,
-         `attachments` INTEGER
+         `attachments` INTEGER,
+         `in_reply_to` TEXT,
+         `in_reply_to_id` INTEGER,
+         `references` TEXT
        )''')
 
