@@ -7,7 +7,7 @@ def log_database(conn, param, email):
 
   c = conn.cursor()
   c.execute('''
-    INSERT INTO log (`param`, `email`)
+    INSERT INTO email_log (`param`, `email`)
     VALUES (?, ?)
     ''', values)
 
