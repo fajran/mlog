@@ -20,3 +20,8 @@ def init(conn):
          `references` TEXT
        )''')
 
+  c.execute(
+    '''CREATE INDEX IF NOT EXISTS email_log_idx_message_id
+       ON email_log (message_id)
+    ''')
+
