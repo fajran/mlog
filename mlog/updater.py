@@ -6,13 +6,8 @@ from . import settings
 
 def update_stage_0(conn):
   c = conn.cursor()
-  c.execute('''
-    SELECT id
-    FROM email_log
-    WHERE stage=0
-    ''')
+  ids = _get_stage_ids(conn, 0)
 
-  ids = [row[0] for row in c]
   for lid in ids:
     values = (lid,)
     c.execute('''
@@ -72,4 +67,15 @@ def _save_attachments(lid, m, path):
     f.close()
 
     index += 1
+
+def _get_stage_ids(conn, stage):
+  c = conn.cursor()
+  c.execute('''
+    SELECT id
+    FROM email_log
+    WHERE stage=?
+    ''', (stage,))
+
+  ids = [row[0] for row in c]
+  return ids
 
