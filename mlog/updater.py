@@ -41,6 +41,43 @@ def update_stage_0(conn):
     path = settings.ATTACHMENT_SAVE_PATH
     _save_attachments(lid, m, path)
 
+def update_stage_1(conn):
+  c = conn.cursor()
+  ids = _get_stage_ids(conn, 1)
+
+  for lid in ids:
+    values = (lid,)
+    c.execute('''
+      SELECT in_reply_to
+      FROM email_log
+      WHERE id=?
+      ''', values)
+
+    in_reply_to = c.fetchone()[0]
+    if in_reply_to is None:
+      continue
+
+    values = (in_reply_to,)
+    c.execute('''
+      SELECT id
+      FROM email_log
+      WHERE message_id=?
+      ''', values)
+
+    row = c.fetchone()
+    if row is None:
+      continue
+
+    mid = row[0]
+
+    stage = 2
+    values = (mid, stage, lid)
+    c.execute('''
+      UPDATE email_log
+      SET in_reply_to_id=?, stage=?
+      WHERE id=?
+      ''', values)
+
 def _count_attachments(m):
   return sum(map(_is_attachment, m.walk()))
 

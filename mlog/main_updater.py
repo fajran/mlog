@@ -11,6 +11,7 @@ def main():
   db.init(conn)
 
   updater.update_stage_0(conn)
+  updater.update_stage_1(conn)
 
   conn.commit()
 
