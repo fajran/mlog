@@ -36,8 +36,8 @@ def update_stage_0(conn):
               attachments, lid)
     c.execute('''
       UPDATE email_log
-      SET sender=?, receiver=?, subject=?, date_raw=?, message_id=?, stage=?,
-          attachments=?
+      SET `sender`=?, `receiver`=?, `subject`=?, `date_raw`=?, `message_id`=?, `stage`=?,
+          `attachments`=?
       WHERE id=?
       ''', values)
 
