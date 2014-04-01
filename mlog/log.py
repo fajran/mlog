@@ -16,12 +16,11 @@ def log_database(conn, param, email):
 def log_text(fname, param, email):
   from datetime import datetime
 
-  f = open(fname, 'a')
-  f.write("=== %s ===\n" % datetime.now())
-  f.write("args: %s\n" % (" ".join(param),))
-  f.write("-------------\n")
-  f.write(email)
-  f.write("\n\n")
-  f.flush()
-  f.close()
+  with open(fname, 'a') as f:
+    f.write("=== %s ===\n" % datetime.now())
+    f.write("args: %s\n" % (" ".join(param),))
+    f.write("-------------\n")
+    f.write(email)
+    f.write("\n\n")
+    f.flush()
 
