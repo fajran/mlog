@@ -94,10 +94,10 @@ def _save_attachments(lid, m, path):
     fname = item.get_filename()
     mtype = item.get_content_type()
     payload = item.get_payload()
-    content = base64.decodestring(payload)
+    content = base64.decodestring(payload.encode('ascii'))
 
     _, ext = os.path.splitext(fname)
-    target = os.path.join(path, '%s-%s%s' % (lid, index, ext))
+    target = os.path.join(path, '{}-{}{}'.format(lid, index, ext))
 
     f = open(target, 'wb')
     f.write(content)
