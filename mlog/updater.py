@@ -1,5 +1,6 @@
 import base64
 import email
+import gzip
 import os
 
 from . import settings
@@ -11,14 +12,15 @@ def update_stage_0(conn):
   for lid in ids:
     values = (lid,)
     c.execute('''
-      SELECT email
+      SELECT email_gz
       FROM email_log
       WHERE id=?
       ''', values)
 
-    content = c.fetchone()[0]
+    content_gz = c.fetchone()[0]
+    content = gzip.decompress(content_gz).decode('ascii')
 
-    m = email.message_from_string(str(content))
+    m = email.message_from_string(content)
     subject = m.get('Subject')
     receiver = m.get('To')
     sender = m.get('From')

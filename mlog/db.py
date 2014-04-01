@@ -7,7 +7,7 @@ def init(conn):
          `id` INTEGER PRIMARY KEY AUTOINCREMENT,
          `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
          `param` TEXT,
-         `email` TEXT,
+         `email_gz` BLOB,
          `stage` INTEGER DEFAULT 0,
          `sender` TEXT,
          `receiver` TEXT,

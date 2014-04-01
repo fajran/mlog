@@ -1,13 +1,15 @@
+import gzip
 import json
 from datetime import datetime
 
 def log_database(conn, param, email):
   param = json.dumps(param)
-  values = (param, email)
+  email_gz = gzip.compress(email.encode('ascii'))
+  values = (param, email_gz)
 
   c = conn.cursor()
   c.execute('''
-    INSERT INTO email_log (`param`, `email`)
+    INSERT INTO email_log (`param`, `email_gz`)
     VALUES (?, ?)
     ''', values)
 
