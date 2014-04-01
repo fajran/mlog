@@ -17,7 +17,11 @@ def update_stage_0(conn):
       WHERE id=?
       ''', values)
 
-    content_gz = c.fetchone()[0]
+    row = c.fetchone()
+    if row is None:
+      continue
+
+    content_gz = row[0]
     content = gzip.decompress(content_gz).decode('ascii')
 
     m = email.message_from_string(content)
